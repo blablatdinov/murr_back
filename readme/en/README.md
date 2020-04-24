@@ -32,7 +32,7 @@ pip install -r requirements.txt
 ```
 ### Migrations
 ```
-python manage.py makemigrations murren murr_card
+python manage.py makemigrations murren murr_card murr_chat
 python manage.py migrate
 ```
 
