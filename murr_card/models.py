@@ -65,3 +65,18 @@ class Comment(models.Model):
     class Meta:
         verbose_name = 'Комментарий'
         verbose_name_plural = 'Комментарии'
+
+
+class Like(models.Model):
+    """Лайк для murr_card"""
+    murr_card = models.ForeignKey(MurrCard, on_delete=models.CASCADE, related_name='likes', verbose_name='Murr card')
+    user = models.ForeignKey(Murren, on_delete=models.PROTECT, related_name='murrens', verbose_name='автор')
+    is_active = models.BooleanField(default=True, verbose_name='Активен',)
+    # Если муррен уберет лайк, то это поле будет False, тем самым можно всегда узнать кто убрал лайк
+
+    def __str__(self):
+        return f'{self.murr_card} - {self.user}'
+
+    class Meta:
+        verbose_name = 'Лайк'
+        verbose_name_plural = 'Лайки'
