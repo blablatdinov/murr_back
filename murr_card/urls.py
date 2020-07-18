@@ -1,7 +1,8 @@
 from django.urls import path
 from django.views.decorators.csrf import csrf_exempt
 
-from .views import MurrCardView, EditorImageForMurrCardView, AllMurr, CommentView
+from .views import MurrCardView, EditorImageForMurrCardView, AllMurr, CommentView, LikeView
+
 
 urlpatterns = [
     path('', csrf_exempt(MurrCardView.as_view()), name='MurrCardView'),
@@ -9,5 +10,7 @@ urlpatterns = [
     path('all/', csrf_exempt(AllMurr.as_view()), name='all_murrr'),
 
     # CRUD for comments
-    path('comments/', CommentView.as_view(), name='CommentView')
+    path('comments/', CommentView.as_view(), name='CommentView'),
+    # likes
+    path('likes/', LikeView.as_view(), name='LikeView'),
 ]

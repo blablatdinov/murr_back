@@ -11,7 +11,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from murr_back.settings import LOCALHOST
-from .models import MurrCard, Comment
+from .models import MurrCard, Comment, Like
 from .serializers import MurrCardSerializers, EditorImageForMurrCardSerializers, AllMurrSerializer, CommentSerializer
 
 logger = logging.getLogger(__name__)
@@ -137,5 +137,31 @@ class CommentView(APIView):
             {
                 'success': True,
                 'message': f'Comment with id {pk} has been deleted'
+            }, status=204
+        )
+
+
+class LikeView(APIView):
+
+    def get(self, request):
+        murr_card_pk = request.query_params['murr_card']
+        like_count = Like.objects.filter(murr_card__pk=murr_card_pk, is_active=True).count()
+        return Response({'success': True, 'likes_count': like_count})
+
+    def post(self, request):
+        murr_card_pk = request.query_params['murr_card']
+        user = request.user
+        Like.objects.create(user=user, murr_card__pk=murr_card_pk)
+        return self.get(request)  # Чтобы обновить кол-во комментов
+
+    def delete(self, request):
+        like_pk = request.query_params['like']
+        like = Like.objects.get(pk=like_pk)
+        like.is_active = False
+        like.save(updated_fields=['is_active'])
+        return Response(
+            {
+                'success': True,
+                'message': f'Like with id {like_pk} has been deleted'
             }, status=204
         )
